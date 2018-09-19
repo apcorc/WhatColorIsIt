@@ -15,20 +15,21 @@ class DemoViewController: NSViewController {
 
 	let screenSaver: ScreenSaverView = {
 		let view = View()
-		view.autoresizingMask = [.ViewWidthSizable, .ViewHeightSizable]
+		view.autoresizingMask = [.width, .height]
 		return view
 	}()
-
 
 	// MARK: - NSViewController
 
 	override func viewDidLoad() {
+		super.viewDidLoad()
+
 		// Add the clock view to the window
 		screenSaver.frame = view.bounds
 		view.addSubview(screenSaver)
 
 		// Start animating the clock
 		screenSaver.startAnimation()
-		NSTimer.scheduledTimerWithTimeInterval(screenSaver.animationTimeInterval, target: screenSaver, selector: "animateOneFrame", userInfo: nil, repeats: true)
+		Timer.scheduledTimer(timeInterval: screenSaver.animationTimeInterval, target: screenSaver, selector: #selector(ScreenSaverView.animateOneFrame), userInfo: nil, repeats: true)
 	}
 }

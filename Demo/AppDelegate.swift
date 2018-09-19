@@ -10,23 +10,35 @@ import Cocoa
 
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
-	
+
 	// MARK: - Properties
 
-	@IBOutlet var window: NSWindow!
-
+	@IBOutlet weak var window: NSWindow? {
+		didSet {
+			window?.delegate = self
+		}
+	}
 
 	// MARK: - Initializers
 
 	deinit {
-		NSNotificationCenter.defaultCenter().removeObserver(self)
+		NotificationCenter.default.removeObserver(self)
+	}
+
+	// MARK: - Lifecycle
+
+	func applicationDidFinishLaunching(_ notification: Notification) {
+		if let application = notification.object as? NSApplication,
+			let window = application.mainWindow {
+			self.window = window
+		}
 	}
 }
 
 
 extension AppDelegate: NSWindowDelegate {
-	func windowWillClose(notification: NSNotification) {
+	func windowWillClose(_ notification: Notification) {
 		// Quit the app if the main window is closed
-		NSApplication.sharedApplication().terminate(window)
+		NSApplication.shared.terminate(window)
 	}
 }
